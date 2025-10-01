@@ -21,7 +21,6 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
   email = models.EmailField(max_length=200, unique=True)
-  username = models.CharField(max_length=200, null=True, blank=True)
   first_name = models.CharField(max_length=500)
   last_name = models.CharField(max_length=500)
   role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True)
@@ -29,7 +28,7 @@ class User(AbstractUser):
   
   objects = UserManager()
   
-  USERNAME_FIELD = 'email'
+
   REQUIRED_FIELDS = []
   class Meta:
     db_table = 'user'

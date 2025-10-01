@@ -21,9 +21,9 @@ from knox import views as knox_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('',include('api.urls')), 
+    path('api/',include('api.urls')), 
     path('api/SIVEBACK/',include('knox.urls')),
-    path('logout/',knox_views.LogoutView.as_view(), name='knox_logout'), 
-    path('logoutall/',knox_views.LogoutAllView.as_view(), name='knox_logoutall'), 
+    path('api/logout/',knox_views.LogoutView.as_view(), name='knox_logout'), 
+    path('api/logoutall/',knox_views.LogoutAllView.as_view(), name='knox_logoutall'), 
     path('api/password_reset/',include('django_rest_passwordreset.urls', namespace='password_reset')), 
 ]

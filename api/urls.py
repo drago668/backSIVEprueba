@@ -1,9 +1,7 @@
-from django.urls import path 
-from rest_framework.routers import DefaultRouter
-from api.controllers import *
-from api.controllers.user import LoginViewset, RegisterViewset
+from django.urls import path
+from api.controllers.user import APILogin, APIRegister
 
-router = DefaultRouter()
-router.register('register', RegisterViewset, basename='register')
-router.register('login', LoginViewset, basename='login')
-urlpatterns = router.urls
+urlpatterns = [
+    path("register/", APIRegister.as_view(), name="register"),
+    path("login/", APILogin.as_view(), name="login"),
+]
