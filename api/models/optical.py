@@ -1,6 +1,5 @@
 from django.db import models
 from .city import City
-from .schedule import Schedule
 from .user import User
 
 class Optical(models.Model):
@@ -10,14 +9,13 @@ class Optical(models.Model):
     tel = models.CharField(max_length=11)
     city = models.ForeignKey(City, models.DO_NOTHING,db_column='id_city')
     email = models.EmailField(unique=True, max_length=80)
-    schedule = models.ForeignKey(Schedule, models.DO_NOTHING, db_column= 'id_schedule')
     logo = models.CharField(max_length=600)
     user = models.ForeignKey(User, models.CASCADE, db_column='id')
     certCadecuacion = models.CharField(max_length=500)
     certDispensacion = models.CharField(max_length=500)
     latitud = models.FloatField(default=0.0)
     longitud = models.FloatField(default=0.0)
-    view = models.IntegerField(default=0)
+    view = models.PositiveIntegerField(default=0)
     
     
     class Meta: 

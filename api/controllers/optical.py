@@ -2,18 +2,24 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from api.services import OpticalService
 from api.models import Optical, Day, Hour, Schedule
-from api.serializers import OpticalSerializers # asegúrate de tener este serializer
+from api.serializers import OpticalListSerializers, OpticalCreateSerializers
 from api.serializers import DaySerializers
 from api.serializers import HourSerializers
 from api.serializers import ScheduleSerializers
 class OpticalController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = OpticalSerializers
+    create_serializer_class = OpticalCreateSerializers
+    list_serializer_class = OpticalListSerializers
     queryset = Optical.objects.all()
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = OpticalService() 
+        
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return OpticalCreateSerializers
+        return OpticalListSerializers
 
     # GET → listar todas o una por id
     def get(self, request, *args, **kwargs):
@@ -22,27 +28,29 @@ class OpticalController(generics.GenericAPIView):
             optical = self.service.repository.get_optical_by_id(id_optical)
             if not optical:
                 return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
-            serializer = self.serializer_class(optical)
+            serializer = self.list_serializer_class(optical)
             return Response(serializer.data)
         else:
             opticals = self.service.list_optical()
-            serializer = self.serializer_class(opticals, many=True)
+            serializer = self.list_serializer_class(opticals, many=True)
             return Response(serializer.data)
 
     # POST → crear nueva óptica
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.create_serializer_class(data=request.data)
         if serializer.is_valid():
+            validated_data = serializer.validated_data
+            validated_data['user'] = request.user
             try:
-                optical = self.service.create_optical(serializer.validated_data)
-                return Response(self.serializer_class(optical).data, status=status.HTTP_201_CREATED)
+                optical = self.service.create_optical(validated_data)
+                return Response(self.create_serializer_class(optical).data, status=status.HTTP_201_CREATED)
             except ValueError as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # PUT → actualizar óptica existente
     def put(self, request, pk, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, partial=True)
+        serializer = self.list_serializer_class(data=request.data, partial=True)
         if serializer.is_valid():
             try:
                 optical = self.service.update_optical(pk, serializer.validated_data)
@@ -63,6 +71,19 @@ class OpticalController(generics.GenericAPIView):
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+class OpticalIncrementViewController(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, pk):
+        try:
+            optical = Optical.objects.get(pk=pk)
+            optical.views = F('views') + 1
+            optical.save(update_fields=['views'])
+            optical.refresh_from_db()
+            serializer = OpticalListSerializers(optical)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Optical.DoesNotExist:
+            return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 class DayController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = DaySerializers

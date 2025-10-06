@@ -1,4 +1,4 @@
-from .user import User
+from .user import User, password_reset_token_created
 from .role import Role
 from .state import State
 from .city import City
