@@ -6,6 +6,7 @@ from api.serializers import OpticalListSerializers, OpticalCreateSerializers
 from api.serializers import DaySerializers
 from api.serializers import HourSerializers
 from api.serializers import ScheduleSerializers
+from django.db.models import F
 class OpticalController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     create_serializer_class = OpticalCreateSerializers
@@ -49,14 +50,18 @@ class OpticalController(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # PUT → actualizar óptica existente
-    def put(self, request, pk, *args, **kwargs):
-        serializer = self.list_serializer_class(data=request.data, partial=True)
+    def patch(self, request, pk, *args, **kwargs):
+        try:
+            optical = self.service.repository.get_optical_by_id(pk)
+            if not optical:
+                return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        except Optical.DoesNotExist:
+            return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.list_serializer_class(optical, data=request.data, partial=True)
         if serializer.is_valid():
             try:
                 optical = self.service.update_optical(pk, serializer.validated_data)
-                if not optical:
-                    return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
-                return Response(self.serializer_class(optical).data)
+                return Response(self.list_serializer_class(optical).data)
             except ValueError as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
