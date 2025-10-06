@@ -71,7 +71,7 @@ class OpticalController(generics.GenericAPIView):
         try:
             deleted = self.service.delete_optical(pk)
             if deleted:
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                return Response(status=status.HTTP_200_OK)
             return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
