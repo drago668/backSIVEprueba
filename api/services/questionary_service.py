@@ -7,8 +7,23 @@ class QuestionaryService:
         self.repository_option = RepositoryOption()
 
     
-    def list_questionary(self):
-        return self.repository.list()
+    def list_questionary(self, id_questionary=None):
+        
+        # 1. Comprueba si se proporcionó un ID
+        if id_questionary is not None:
+            # Si hay un ID, busca ese objeto específico.
+            try:
+                # La lógica para buscar UN solo cuestionario.
+                # Ajusta esto a tu modelo y ORM (ej. Django, SQLAlchemy)
+                return self.repository.get_questionary_by_id(id_questionary)
+            except self.repository.model.DoesNotExist:
+                return None # Devuelve None si no se encuentra
+        
+        # 2. Si no se proporcionó un ID
+        else:
+            # Devuelve la lista de TODOS los cuestionarios.
+            # Ajusta esto a tu modelo y ORM
+            return self.repository.list()
     
     
     def create_questionary(self, data):

@@ -24,13 +24,17 @@ class QuestionaryController(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         id_questionary = kwargs.get('pk', None)
         if id_questionary:
-            questionary = self.service.list_questionary(id_questionary)
+            # Llama al método específico para obtener por ID
+            questionary = self.service.list_questionary(id_questionary) 
             if not questionary:
                 return Response({"error": "Cuestionario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+            # Usas tu serializador para un solo objeto (many=False por defecto)
             serializer = self.list_serializer_class(questionary)
             return Response(serializer.data)
         else:
+            # Llama al método para obtener la lista completa
             questionarys = self.service.list_questionary()
+            # Usas tu serializador para una lista de objetos (many=True)
             serializer = self.list_serializer_class(questionarys, many=True)
             return Response(serializer.data)
 
