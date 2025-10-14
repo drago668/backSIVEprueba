@@ -18,7 +18,7 @@ class OpticalController(generics.GenericAPIView):
         self.service = OpticalService() 
         
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == 'post':
             return OpticalCreateSerializers
         return OpticalListSerializers
 

@@ -13,11 +13,6 @@ class QuestionaryController(generics.GenericAPIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = QuestionaryService() 
-        
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return QuestionaryCreateSerializers
-        return QuestionaryListSerializers
 
     # GET → listar todas o una por id
     def get(self, request, *args, **kwargs):
@@ -42,7 +37,7 @@ class QuestionaryController(generics.GenericAPIView):
         serializer = self.create_serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             validated_data = serializer.validated_data
-            validated_data['Author'] = request.user
+            # validated_data['Author'] = request.user
             try:
                 questionary = self.service.create_questionary(validated_data)
                 return Response(self.create_serializer_class(questionary).data, status=status.HTTP_201_CREATED)

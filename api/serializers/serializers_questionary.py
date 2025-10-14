@@ -22,16 +22,18 @@ class OptionCreateSerializers(serializers.ModelSerializer):
         model = Option
         fields = ['descriptionOp', 'question']
 
-class QuestionListSerializers(serializers.ModelSerializer):
-    class Meta: 
-        model = Question
-        fields = ['id_question', 'question', 'image_question', 'questionary']
-        read_only_fields = ['id_question']
 class OptionListSerializers(serializers.ModelSerializer):
     class Meta: 
         model = Option
         fields = ['id_option', 'descriptionOp', 'question']
         read_only_fields = ['id_option']
-
-
         
+class QuestionListSerializers(serializers.ModelSerializer):
+    options = OptionListSerializers(many=True, read_only=True)
+    
+    class Meta: 
+        model = Question
+        fields = ['id_question', 'question', 'image_question', 'questionary', 'options']
+        read_only_fields = ['id_question']
+
+
