@@ -11,6 +11,13 @@ class TestController(generics.GenericAPIView):
     create_serializer_class = TestCreateSerializers
     delete_serializer_class = TestDeleteSerializers
     queryset = Test.objects.all()
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return TestCreateSerializers
+        elif self.request.method == 'DELETE':
+            return TestDeleteSerializers
+        return TestSerializers
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
