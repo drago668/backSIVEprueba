@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "api",
     "knox",
     'django_rest_passwordreset',
-    "corsheaders"
+    "corsheaders",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "SIVEBACK.wsgi.application"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # Database
@@ -154,3 +156,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS = [
    "http://localhost:5173"
    ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'SIVEBACK API',
+    'DESCRIPTION': 'API para el proyecto SIVEBACK',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}

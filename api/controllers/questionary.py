@@ -83,11 +83,11 @@ class QuestionController(generics.GenericAPIView):
             question = self.service.list_question(id_question) 
             if not question:
                 return Response({"error": "Pregunta no encontrada"}, status=status.HTTP_404_NOT_FOUND)
-            serializer = self.create_serializer_class(question)
+            serializer = self.list_serializer_class(question)
             return Response(serializer.data)
         else:
             questions = self.service.list_question()
-            serializer = self.create_serializer_class(questions, many=True)
+            serializer = self.list_serializer_class(questions, many=True)
             return Response(serializer.data)
         
     def post(self, request, *args, **kwargs):
@@ -137,11 +137,11 @@ class OptionController(generics.GenericAPIView):
             option = self.service.list_option(id_option) 
             if not option:
                 return Response({"error": "Opción no encontrada"}, status=status.HTTP_404_NOT_FOUND)
-            serializer = self.create_serializer_class(option)
+            serializer = self.list_serializer_class(option)
             return Response(serializer.data)
         else:
             options = self.service.list_option()
-            serializer = self.create_serializer_class(options, many=True)
+            serializer = self.list_serializer_class(options, many=True)
             return Response(serializer.data)
         
     def post(self, request, *args, **kwargs):

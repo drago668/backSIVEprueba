@@ -20,5 +20,7 @@ urlpatterns = [
     path('option/<int:pk>/',ctrl.OptionController.as_view(), name='option_detail'),
     path('logout/',knox_views.LogoutView.as_view(), name='knox_logout'), 
     path('logoutall/',knox_views.LogoutAllView.as_view(), name='knox_logoutall'), 
-    path('password_reset/',include('django_rest_passwordreset.urls', namespace='password_reset')), 
+    path('password_reset/',include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path ('test/',ctrl.TestController.as_view(), name='test'),
+    path ('test/<int:pk>/',ctrl.TestController.as_view(), name='test_detail'), 
 ]

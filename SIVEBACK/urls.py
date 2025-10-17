@@ -20,9 +20,12 @@ from django.urls import path, include
 from knox import views as knox_views
 from api.controllers.optical import OpticalController
 from api.controllers.optical import OpticalController, DayController, HourController, ScheduleController
+from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/',include('api.urls'))
+    path('api/',include('api.urls')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
