@@ -1,5 +1,6 @@
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from api.services import OpticalService
 from api.models import Optical, Day, Hour, Schedule
 from api.serializers import OpticalListSerializers, OpticalCreateSerializers
@@ -9,42 +10,43 @@ from api.serializers import ScheduleSerializers
 from django.db.models import F
 class OpticalControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    
+
     def get_queryset(self):
         return Optical.objects.all()
-            
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return OpticalCreateSerializers
         return OpticalListSerializers
-    
+
     def __init__(self, **kwargs):
         self.service = OpticalService()
-        super().__init__(**kwargs)  
+        super().__init__(**kwargs)
 
     def get(self, request, *args, **kwargs):
         optics = self.service.repository.list()
         serializer = self.list_serializer_class(optics, many=True)
         return Response(serializer.data)
 
+    permission_classes = [IsAuthenticated]
     # POST → crear nueva óptica
     def post(self, request, *args, **kwargs):
-        serializer = self.create_serializer_class(data=request.data)
-        if serializer.is_valid():
-            validated_data = serializer.validated_data
-            validated_data['user'] = request.user
-            try:
-                optical = self.service.create_optical(validated_data)
-                return Response(self.create_serializer_class(optical).data, status=status.HTTP_201_CREATED)
-            except ValueError as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+      serializer = self.get_serializer_class()(data=request.data)
+      if serializer.is_valid():
+        validated_data = serializer.validated_data
+        validated_data['user'] = request.user
+        try:
+          optical = self.service.create_optical(validated_data)
+          return Response(self.get_serializer_class()(optical).data, status=status.HTTP_201_CREATED)
+        except ValueError as e:
+          return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OpticalControllerList(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = OpticalListSerializers
     queryset = Optical.objects.all()
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = OpticalService()
@@ -58,7 +60,7 @@ class OpticalControllerList(generics.GenericAPIView):
                 return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
             serializer = self.serializer_class(optical)
             return Response(serializer.data)
-    
+
     # PUT → actualizar óptica existente
     def patch(self, request, pk, *args, **kwargs):
         try:
@@ -104,17 +106,17 @@ class DayController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = DaySerializers
     queryset = Day.objects.all()
-    
+
     def get(self, request, *args, **kwargs):
         days = Day.objects.all()
         serializer = DaySerializers(days, many=True)
         return Response(serializer.data)
-    
+
 class HourController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = HourSerializers
     queryset = Hour.objects.all()
-    
+
     def get(self, request, *args, **kwargs):
         hours = Hour.objects.all()
         serializer = HourSerializers(hours, many=True)
@@ -124,7 +126,7 @@ class ScheduleController(generics.GenericAPIView):
     #permission_classes = [permissions.AllowAny]
     serializer_class = ScheduleSerializers
     queryset = Schedule.objects.all()
-    
+
    # 🔹 GET → Listar todos o uno por id
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)

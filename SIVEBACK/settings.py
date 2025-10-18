@@ -104,7 +104,7 @@ AUTH_USER_MODEL = 'api.user'
 
 AUTHENTICATION_BACKENDS =[
     # 'users.auth_email.EmailAuthBackend'
-    "django.contrib.auth.backends.ModelBackend", 
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -162,4 +162,19 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API para el proyecto SIVEBACK',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+SPECTACULAR_SETTINGS = {
+  'TITLE': 'API SIVEBACK',
+  'DESCRIPTION': 'Documentación de la API',
+  'VERSION': '1.0.0',
+  # Registra la extensión que acabas de crear
+  'AUTHENTICATION_EXTENSIONS': {
+    'knox.auth.TokenAuthentication': 'api.auth.KnoxTokenScheme',
+  },
+  'SECURITY': [
+    {
+      'tokenAuth': []
+    }
+  ],
 }
