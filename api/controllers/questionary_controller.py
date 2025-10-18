@@ -140,27 +140,29 @@ class QuestionControllerList(generics.GenericAPIView):
 
 class OptionControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = OptionListSerializers
-    create_serializer_class = OptionCreateSerializers
-    list_serializer_class = OptionListSerializers
     queryset = Option.objects.all()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = OptionService()
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return OptionCreateSerializers
+        return OptionListSerializers
 
     def get(self, request, *args, **kwargs):
       options = self.service.list_option()
-      serializer = self.list_serializer_class(options, many=True)
+      serializer = self.get_serializer_class()(options, many=True)
       return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.create_serializer_class(data=request.data)
+        serializer = self.get_serializer_class()(data=request.data)
         if serializer.is_valid(raise_exception=True):
             validated_data = serializer.validated_data
             try:
                 option = self.service.create_option(validated_data)
-                return Response(self.create_serializer_class(option).data, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             except ValueError as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -25,7 +25,7 @@ class OpticalControllerCreate(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         optics = self.service.repository.list()
-        serializer = self.list_serializer_class(optics, many=True)
+        serializer = self.get_serializer_class()(optics, many=True)
         return Response(serializer.data)
 
     permission_classes = [IsAuthenticated]

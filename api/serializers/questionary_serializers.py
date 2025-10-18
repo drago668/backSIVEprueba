@@ -14,9 +14,10 @@ class QuestionCreateSerializers(serializers.ModelSerializer):
         fields = ['question', 'image_question', 'questionary']
 
 class OptionCreateSerializers(serializers.ModelSerializer):
+    question_id = serializers.IntegerField()
     class Meta: 
         model = Option
-        fields = ['descriptionOp', 'question']
+        fields = ['question_id','descriptionOp']
 
 class OptionListSerializers(serializers.ModelSerializer):
     class Meta: 
