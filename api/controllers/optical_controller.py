@@ -57,7 +57,10 @@ class OpticalControllerList(generics.GenericAPIView):
         if id_optical:
             optical = self.service.get_optical(id_optical)
             if not optical:
-                return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+              return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+            optical.view = F('view') + 1
+            optical.save(update_fields=['view'])
+            optical.refresh_from_db()
             serializer = self.serializer_class(optical)
             return Response(serializer.data)
 
@@ -89,19 +92,6 @@ class OpticalControllerList(generics.GenericAPIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class OpticalIncrementViewController(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
-
-    def post(self, request, pk):
-        try:
-            optical = Optical.objects.get(pk=pk)
-            optical.views = F('views') + 1
-            optical.save(update_fields=['views'])
-            optical.refresh_from_db()
-            serializer = OpticalListSerializers(optical)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Optical.DoesNotExist:
-            return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 class DayController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = DaySerializers
