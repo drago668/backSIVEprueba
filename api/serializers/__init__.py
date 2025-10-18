@@ -3,3 +3,4 @@ from .optical_serializers import OpticalCreateSerializers, OpticalListSerializer
 from .schedule_serializers import ScheduleSerializers, DaySerializers, HourSerializers
 from .questionary_serializers import QuestionaryCreateSerializers, QuestionaryListSerializers, QuestionCreateSerializers,QuestionListSerializers, OptionCreateSerializers, OptionListSerializers
 from .test_serializers import TestSerializers, TestCreateSerializers, TestDeleteSerializers
+from .catalogue_serializers import CatalogueCreateSerializers, CatalogueListSerializers
