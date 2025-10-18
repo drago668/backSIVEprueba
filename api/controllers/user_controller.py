@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from api.serializers.serializers_user import RegisterSerializers, LoginSerializers
+from api.serializers.user_serializers import RegisterSerializers, LoginSerializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.response import Response
 from knox.models import AuthToken

@@ -1,5 +1,5 @@
-from .serializers_user import RegisterSerializers
-from .serializers_optical import OpticalCreateSerializers, OpticalListSerializers
-from .serializers_schedule import ScheduleSerializers, DaySerializers, HourSerializers
-from .serializers_questionary import QuestionaryCreateSerializers, QuestionaryListSerializers, QuestionCreateSerializers,QuestionListSerializers, OptionCreateSerializers, OptionListSerializers
-from .serializers_test import TestSerializers, TestCreateSerializers, TestDeleteSerializers
+from .user_serializers import RegisterSerializers
+from .optical_serializers import OpticalCreateSerializers, OpticalListSerializers
+from .schedule_serializers import ScheduleSerializers, DaySerializers, HourSerializers
+from .questionary_serializers import QuestionaryCreateSerializers, QuestionaryListSerializers, QuestionCreateSerializers,QuestionListSerializers, OptionCreateSerializers, OptionListSerializers
+from .test_serializers import TestSerializers, TestCreateSerializers, TestDeleteSerializers
