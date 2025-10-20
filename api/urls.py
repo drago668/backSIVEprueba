@@ -24,4 +24,6 @@ urlpatterns = [
     path('test/<int:pk>/',ctrl.TestControllerList.as_view(), name='test_detail'),
     path('catalogue/', ctrl.CatalogueControllerCreate.as_view(), name='catalogue'),
     path('catalogue/<int:pk>/', ctrl.CatalogueControllerList.as_view(), name='catalogue_detail'),
+    path("city/", ctrl.CityController.as_view(), name = "citys"),
+    path("state/",ctrl.StateController.as_view(), name = "estado")
 ]

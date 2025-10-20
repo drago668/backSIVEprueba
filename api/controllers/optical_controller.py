@@ -2,8 +2,8 @@ from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from api.services import OpticalService
-from api.models import Optical, Day, Hour, Schedule
-from api.serializers import OpticalListSerializers, OpticalCreateSerializers
+from api.models import Optical, Day, Hour, Schedule, City
+from api.serializers import OpticalListSerializers, OpticalCreateSerializers, CitySerializers 
 from api.serializers import DaySerializers
 from api.serializers import HourSerializers
 from api.serializers import ScheduleSerializers
@@ -91,12 +91,20 @@ class OpticalControllerList(generics.GenericAPIView):
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
+class CityController(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class= CitySerializers
+    
+    def get(self,request, *args, **kwargs):
+        cities = City.objects.all()
+        serializer = self.serializer_class(cities, many=True)
+        return Response(serializer.data)
+    
 class DayController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = DaySerializers
     queryset = Day.objects.all()
-
+        
     def get(self, request, *args, **kwargs):
         days = Day.objects.all()
         serializer = DaySerializers(days, many=True)

@@ -3,3 +3,4 @@ from .user_controller import *
 from .questionary_controller import *
 from .test_controller import *
 from .catalogue_controller import *
+from .state_controller import *
