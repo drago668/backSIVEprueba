@@ -11,9 +11,11 @@ class TestCreateSerializers(serializers.ModelSerializer):
     # user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     questionary_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
+    question_id= serializers.IntegerField()
+    source_id= serializers.IntegerField()
     class Meta: 
         model = Test
-        fields = ['id_test', 'questionary_id', 'user_id', 'date_test', 'source']
+        fields = ['id_test', 'questionary_id', 'question_id', 'user_id', 'date_test', 'source_id']
         read_only_fields = ['id_test']
         
 class TestDeleteSerializers(serializers.ModelSerializer):

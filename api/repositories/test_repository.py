@@ -18,11 +18,11 @@ class RepositoryTest:
     def get_user_by_id(self, id_user):
         return User.objects.get(id=id_user)
     
-    def create_test(self, **test_Data):
-        try:
-            return Test.objects.create(**test_Data)
-        except Exception as e:
-            raise ObjectDoesNotExist("Error al crear el test")
+    def create_test(self,**kwargs):
+        test = Test(**kwargs)
+        test.save()
+        return test 
+        
 
     def delete_test(self, test_instance):
         if test_instance:

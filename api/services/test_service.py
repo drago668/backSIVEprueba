@@ -1,6 +1,6 @@
 from api.models.test import Test
 from api.repositories import RepositoryTest
-from api.models import Questionary, User
+from api.models import Questionary, User , Question
 
 class TestService:
     def __init__(self):
@@ -17,6 +17,8 @@ class TestService:
             return self.repository.create_test(**validated_data)
         except Questionary.DoesNotExist:
             raise ValueError(f"Cuestionario con ID {validated_data["questionary_id"]} no encontrado.")
+        except Question.DoesNotExist:
+            raise ValueError(f"Pregunta ID {validated_data["question_id"]} no encontrado.")
         except User.DoesNotExist:
             raise ValueError(f"Usuario con ID {validated_data["user_id"]} no encontrado.")
           
