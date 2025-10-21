@@ -4,6 +4,7 @@ from permissions import IsOwnerUser, IsAdminUser, IsRegularUser
 from api.services import CatalogueService
 from api.models import Catalogue
 from api.serializers import CatalogueListSerializers, CatalogueCreateSerializers
+from drf_spectacular.utils import extend_schema
 
 class CatalogueControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -20,13 +21,28 @@ class CatalogueControllerCreate(generics.GenericAPIView):
         self.service = CatalogueService()
         super().__init__(**kwargs)
     
-    permission_classes = [IsRegularUser]
+    permission_classes = [IsRegularUser , IsAdminUser, IsOwnerUser]
     def get(self, request, *args, **kwargs):
         catalogues = self.service.repository.list()
         serializer = self.get_serializer_class()(catalogues, many=True)
         return Response(serializer.data)
 
     permission_classes = [IsOwnerUser, IsAdminUser]
+    @extend_schema(
+        request ={
+                'multipart/form-data': {
+                'type': 'object',
+                'properties': {
+                    # Otros campos de texto
+                    'nameP': {'type': 'string'},
+                    'description': {'type': 'string'},
+                    'image': {'type': 'string', 'format': 'binary'},
+                    'price': {'type': 'integer'},
+                    'optical': {'type': 'integer'},
+                }
+            }
+        }
+    )
     # POST → crear nuevo catálogo
     def post(self, request, *args, **kwargs):
       serializer = self.get_serializer_class()(data=request.data)
@@ -48,7 +64,7 @@ class CatalogueControllerList(generics.GenericAPIView):
         super().__init__(**kwargs)
         self.service = CatalogueService()
 
-    permission_classes = [IsRegularUser]
+    permission_classes = [IsRegularUser, IsAdminUser, IsOwnerUser]
     # GET → listar uno por id
     def get(self, request, *args, **kwargs):
         id_catalogue = kwargs.get('pk', None)
@@ -60,6 +76,21 @@ class CatalogueControllerList(generics.GenericAPIView):
             return Response(serializer.data)
     
     permission_classes = [IsOwnerUser, IsAdminUser]
+    @extend_schema(
+        request ={
+                'multipart/form-data': {
+                'type': 'object',
+                'properties': {
+                    # Otros campos de texto
+                    'nameP': {'type': 'string'},
+                    'description': {'type': 'string'},
+                    'image': {'type': 'string', 'format': 'binary'},
+                    'price': {'type': 'integer'},
+                    'optical': {'type': 'integer'},
+                }
+            }
+        }
+    )
     def patch(self, request, *args, **kwargs):
         id_catalogue = kwargs.get('pk', None)
         if not id_catalogue:

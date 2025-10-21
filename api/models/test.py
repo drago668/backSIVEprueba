@@ -10,7 +10,7 @@ class Test (models.Model):
   question= models.ForeignKey(Question, models.DO_NOTHING, db_column='id_question',default=0)
   user= models.ForeignKey(User, models.DO_NOTHING, db_column='id')
   date_test = models.DateField(auto_now_add=True)
-  source = models.ForeignKey(Option,models.DO_NOTHING, db_column= 'source')
+  answer = models.CharField(max_length= 50, null=True)
   
   class Meta: 
     db_table = 'test'

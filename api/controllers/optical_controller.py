@@ -47,8 +47,8 @@ class OpticalControllerCreate(generics.GenericAPIView):
                     'tel': {'type': 'string'},
                     'city': {'type': 'integer'},
                     'email': {'type': 'string', 'format': 'email'},
-                    'certCadecuacion': {'type': 'string'},
-                    'certDispensacion': {'type': 'string'},
+                    'certCadecuacion': {'type': 'string', 'format': 'binary'},
+                    'certDispensacion': {'type': 'string', 'format': 'binary'},
                     'latitud': {'type': 'number', 'format': 'float'},
                     'longitud': {'type': 'number', 'format': 'float'},
 
@@ -110,8 +110,8 @@ class OpticalControllerList(generics.GenericAPIView):
                     'tel': {'type': 'string'},
                     'city': {'type': 'integer'},
                     'email': {'type': 'string', 'format': 'email'},
-                    'certCadecuacion': {'type': 'string'},
-                    'certDispensacion': {'type': 'string'},
+                    'certCadecuacion': {'type': 'string', 'format': 'binary'},
+                    'certDispensacion': {'type': 'string', 'format': 'binary'},
                     'latitud': {'type': 'number', 'format': 'float'},
                     'longitud': {'type': 'number', 'format': 'float'},
 
