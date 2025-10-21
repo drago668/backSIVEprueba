@@ -1,4 +1,4 @@
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status, permissions, viewsets
 from rest_framework.response import Response
 from permissions import IsOwnerUser, IsAdminUser, IsRegularUser
 from api.services import OpticalService
@@ -6,7 +6,7 @@ from api.models import Optical, Day, Hour, Schedule
 from api.serializers import OpticalListSerializers, OpticalCreateSerializers
 from api.serializers import DaySerializers
 from api.serializers import HourSerializers
-from api.serializers import ScheduleSerializers
+from api.serializers import ScheduleSerializers, ServiceSerializers
 from django.db.models import F
 class OpticalControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
@@ -121,10 +121,10 @@ class ScheduleControllerCreate(generics.GenericAPIView):
     #permission_classes = [permissions.AllowAny]
     serializer_class = ScheduleSerializers
     queryset = Schedule.objects.all()
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return ScheduleSerializers
@@ -148,17 +148,17 @@ class ScheduleControllerCreate(generics.GenericAPIView):
 
 class ScheduleControllerList(generics.GenericAPIView):
     serializer_class = ScheduleSerializers
-        
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    
+
     def get_serializer_class(self):
         if self.request.method == 'PUT':
             return ScheduleSerializers
         elif self.request.method == 'DELETE':
             return ScheduleSerializers
         return ScheduleSerializers
-    
+
     permission_classes = [IsOwnerUser, IsAdminUser]
     def get(self, request, *args, **kwargs):
         id_schedule = kwargs.get('pk', None)
@@ -169,7 +169,7 @@ class ScheduleControllerList(generics.GenericAPIView):
                 return Response({'error': 'Horario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
             serializer = ScheduleSerializers(schedule)
             return Response(serializer.data)
-        
+
     permission_classes = [IsOwnerUser, IsAdminUser]
     # 🔹 PUT → Actualizar horario existente
     def put(self, request, pk, *args, **kwargs):
@@ -183,7 +183,7 @@ class ScheduleControllerList(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     permission_classes = [IsOwnerUser, IsAdminUser]
     # 🔹 DELETE → Eliminar horario
     def delete(self, request, pk, *args, **kwargs):
@@ -193,3 +193,10 @@ class ScheduleControllerList(generics.GenericAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Schedule.DoesNotExist:
             return Response({'error': 'Horario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+class ServiceController(viewsets.ModelViewSet):
+        queryset = Service.objects.all()
+        serializer_class= ServiceSerializers
+        permission_classes=[IsAuthenticated]
+
+        http_method_names=['get','post','patch','delete']

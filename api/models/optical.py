@@ -10,6 +10,7 @@ class Optical(models.Model):
     city = models.ForeignKey(City, models.DO_NOTHING,db_column='id_city')
     email = models.EmailField(unique=True, max_length=80)
     logo = models.CharField(max_length=600)
+    descriptionOp = models.CharField(max_length=600, default='No hay descripción')
     user = models.ForeignKey(User, models.CASCADE, db_column='id')
     certCadecuacion = models.CharField(max_length=500)
     certDispensacion = models.CharField(max_length=500)

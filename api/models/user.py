@@ -30,8 +30,8 @@ class User(AbstractUser):
   username = models.CharField(max_length=200, null=True, blank=True)
   first_name = models.CharField(max_length=500)
   last_name = models.CharField(max_length=500)
-  role = models.ForeignKey(Role, on_delete=models.CASCADE, null=False, blank=False, default=3)
-  state = models.ForeignKey(State,on_delete=models.CASCADE, null=True, blank=True)
+  role = models.ForeignKey(Role, on_delete=models.CASCADE, null=False, blank=False, default=1)
+  state = models.ForeignKey(State,on_delete=models.CASCADE, null=True, blank=True, default=1)
   
   objects = UserManager()
   
