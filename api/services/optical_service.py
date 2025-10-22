@@ -11,6 +11,13 @@ class OpticalService:
     def get_optical(self, optical_id):
       return self.repository.get_optical_by_id(optical_id)
 
+    def get_city_distribution_data(self):
+      query_data = self.repository.get_opticals_by_all_city()
+      return query_data
+
+    def get_top_viewed_opticals(self, top_n=5):
+      query_data = self.repository.get_top_viewed(limit=top_n)
+      return query_data
 
     def create_optical(self, data):
       if "nameOp" not in data or "email" not in data or "address" not in data:

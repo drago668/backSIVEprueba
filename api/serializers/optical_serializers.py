@@ -11,8 +11,16 @@ class OpticalListSerializers(serializers.ModelSerializer):
     model = Optical
     fields = ['id_optical', 'nameOp', 'address', 'tel', 'city', 'email', 'logo', 'user', 'certCadecuacion', 'certDispensacion', 'latitud', 'longitud', 'view']
     read_only_fields = ['id_optical', 'view', 'user']
-    
+
+class OpticalTopViewedSerializers(serializers.Serializer):
+  nameOp = serializers.CharField(max_length=255)
+  view = serializers.IntegerField()
+
+class OpticalByAllCitySerializers(serializers.Serializer):
+  city_name = serializers.CharField(max_length=255)
+  count = serializers.IntegerField()
+
 class CitySerializers(serializers.ModelSerializer):
-  class Meta: 
-    model = City 
+  class Meta:
+    model = City
     fields = ['id_city', 'name']

@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from api.services import OpticalService
 from api.models import Optical, Day, Hour, Schedule, Service, City
 from api.serializers import CitySerializers
-from api.serializers import OpticalListSerializers, OpticalCreateSerializers
+from api.serializers import OpticalListSerializers, OpticalCreateSerializers, OpticalTopViewedSerializers, OpticalByAllCitySerializers
 from api.serializers import DaySerializers
 from api.serializers import HourSerializers
 from api.serializers import ScheduleSerializers, ServiceSerializers
@@ -155,6 +155,32 @@ class OpticalControllerList(generics.GenericAPIView):
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+class OpticalTopViewedController(generics.GenericAPIView):
+    permission_classes = [IsAdminUser, IsOwnerUser]
+    serializer_class = OpticalTopViewedSerializers
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.service = OpticalService()
+
+    def get(self, request, *args, **kwargs):
+        top_viewed_optics = self.service.get_top_viewed_opticals()
+        serializer = self.serializer_class(top_viewed_optics, many=True)
+        return Response(serializer.data)
+
+class OpticalByCityallController(generics.GenericAPIView):
+    permission_classes = [IsAdminUser, IsOwnerUser]
+    serializer_class = OpticalByAllCitySerializers
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.service = OpticalService()
+
+    def get(self, request, *args, **kwargs):
+        # traer todas las ópticas de todas las ciudades
+        city_data = self.service.get_city_distribution_data()
+        serializer = self.serializer_class(city_data, many=True)
+        return Response(serializer.data)
 class CityController(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class= CitySerializers
