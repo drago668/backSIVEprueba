@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from api.models import User
 from api.serializers.user_serializers import RegisterSerializers, LoginSerializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.response import Response
@@ -34,6 +35,13 @@ class APILogin(generics.GenericAPIView):
 
             user = authenticate(request, email=email, password=password)
             if user:
+                if User.state == 2:
+                    return Response({"error": "Has sido bloqueado por acciones sospechosas comuniquese con el equipo de desarrollo"})
+                elif User.state== 4: 
+                    return Response(
+                        {"error": "Tu cuenta ha sido eliminada."}
+                    )
+                    
                 _, token = AuthToken.objects.create(user)
                 return Response({
                     'user': RegisterSerializers(user).data,

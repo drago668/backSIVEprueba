@@ -22,14 +22,14 @@ class TestControllerCreate(generics.GenericAPIView):
         super().__init__(**kwargs)
         self.service = test_service.TestService()
 
-    permissions_classes = [IsRegularUser, IsAdminUser]
+    permissions_classes = [IsRegularUser| IsAdminUser]
     # GET → listar todos los tests
     def get(self, request, *args, **kwargs):
         tests = self.service.list_tests()
         serializer = self.serializer_class(tests, many=True)
         return Response(serializer.data)
 
-    permissions_classes = [IsAdminUser, IsRegularUser]
+    permissions_classes = [IsAdminUser| IsRegularUser]
     # POST → crear nuevo test
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class(data=request.data)
@@ -51,7 +51,7 @@ class TestControllerList(generics.GenericAPIView):
         super().__init__(**kwargs)
         self.service = test_service.TestService()
     
-    permissions_classes = [IsRegularUser, IsAdminUser]
+    permissions_classes = [IsRegularUser| IsAdminUser]
     # GET → listar por id
     def get(self, request, *args, **kwargs):
         id_test = kwargs.get('pk', None)

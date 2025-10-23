@@ -8,6 +8,6 @@ from permissions import IsAdminUser, IsOwnerUser, IsRegularUser
 class CommentController(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializers
-    permission_classes = [IsAuthenticated, IsRegularUser, IsAdminUser]
+    permission_classes = [IsAuthenticated| IsRegularUser| IsAdminUser]
     
     http_method_names = ['get','post','patch','delete']

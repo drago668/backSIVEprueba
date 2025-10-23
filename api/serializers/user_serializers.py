@@ -20,4 +20,7 @@ class LoginSerializers(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
         
-    
+    class Meta:
+        model= User
+        fields =('state')
+        reed_only_fields=('state')

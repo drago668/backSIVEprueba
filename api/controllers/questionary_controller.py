@@ -23,7 +23,7 @@ class QuestionaryControllerCreate(generics.GenericAPIView):
             return self.list_serializer_class
         return QuestionaryListSerializers
 
-    permission_classes = [IsRegularUser, IsOwnerUser, IsAdminUser]
+    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar todas los cuestionarios
     def get(self, request, *args, **kwargs):
         questionarys = self.service.list_questionary()
@@ -56,7 +56,8 @@ class QuestionaryControllerList(generics.GenericAPIView):
         if self.request.method == 'PATCH':
             return QuestionaryCreateSerializers
         return QuestionaryListSerializers
-    permission_classes = [IsRegularUser, IsOwnerUser, IsAdminUser]
+    
+    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar una por id
     def get(self, request, *args, **kwargs):
         id_questionary = kwargs.get('pk', None)
@@ -109,7 +110,7 @@ class QuestionControllerCreate(generics.GenericAPIView):
             return self.list_serializer_class
         return QuestionListSerializers
 
-    permission_classes = [IsRegularUser, IsOwnerUser, IsAdminUser]
+    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar todas las preguntas
     def get(self, request, *args, **kwargs):
         questions = self.service.list_question()
@@ -158,7 +159,7 @@ class QuestionControllerList(generics.GenericAPIView):
             return self.delete_serializer_class
         return QuestionListSerializers
 
-    permission_classes = [IsRegularUser, IsOwnerUser, IsAdminUser]
+    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar una por id
     def get(self, request, *args, **kwargs):
         id_question = kwargs.get('pk', None)
@@ -215,7 +216,7 @@ class OptionControllerCreate(generics.GenericAPIView):
             return OptionCreateSerializers
         return OptionListSerializers
 
-    permission_classes = [IsRegularUser, IsOwnerUser, IsAdminUser]
+    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar todas las opciones
     def get(self, request, *args, **kwargs):
       options = self.service.list_option()
@@ -246,7 +247,7 @@ class OptionControllerList(generics.GenericAPIView):
         super().__init__(**kwargs)
         self.service = OptionService()
 
-    permission_classes = [IsRegularUser, IsOwnerUser, IsAdminUser]
+    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar una por id
     def get(self, request, *args, **kwargs):
         id_option = kwargs.get('pk', None)
