@@ -7,27 +7,28 @@ from api.serializers import CatalogueListSerializers, CatalogueCreateSerializers
 from drf_spectacular.utils import extend_schema
 
 class CatalogueControllerCreate(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         return Catalogue.objects.all()
 
-    def get_serializer_class(self):
+    def get_permissions(self):
         if self.request.method == 'POST':
-            return CatalogueCreateSerializers
-        return CatalogueListSerializers
+            permission_classes = [IsAdminUser | IsOwnerUser]
+        elif self.request.method == 'GET':
+            permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def __init__(self, **kwargs):
         self.service = CatalogueService()
         super().__init__(**kwargs)
-    
-    permission_classes = [IsRegularUser | IsAdminUser| IsOwnerUser]
+        
     def get(self, request, *args, **kwargs):
         catalogues = self.service.repository.list()
         serializer = self.get_serializer_class()(catalogues, many=True)
         return Response(serializer.data)
 
-    permission_classes = [IsOwnerUser| IsAdminUser]
     @extend_schema(
         request ={
                 'multipart/form-data': {
@@ -56,15 +57,24 @@ class CatalogueControllerCreate(generics.GenericAPIView):
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
 class CatalogueControllerList(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
     serializer_class = CatalogueListSerializers
     queryset = Catalogue.objects.all()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = CatalogueService()
+    def get_permissions(self):
+        if self.request.method == 'PATCH':
+            permission_classes = [IsAdminUser | IsOwnerUser]
+        elif self.request.method =='DELETE':
+            permission_classes= [IsAdminUser | IsOwnerUser]
+        elif self.request.method == 'GET':
+            permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
 
-    permission_classes = [IsRegularUser| IsAdminUser| IsOwnerUser]
     # GET → listar uno por id
     def get(self, request, *args, **kwargs):
         id_catalogue = kwargs.get('pk', None)
@@ -75,7 +85,6 @@ class CatalogueControllerList(generics.GenericAPIView):
             serializer = self.get_serializer_class()(catalogue)
             return Response(serializer.data)
     
-    permission_classes = [IsOwnerUser| IsAdminUser]
     @extend_schema(
         request ={
                 'multipart/form-data': {
@@ -110,7 +119,6 @@ class CatalogueControllerList(generics.GenericAPIView):
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    permission_classes = [IsOwnerUser| IsAdminUser]
     def delete(self, request, *args, **kwargs):
         id_catalogue = kwargs.get('pk', None)
         if not id_catalogue:

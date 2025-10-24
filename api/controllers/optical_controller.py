@@ -12,21 +12,23 @@ from api.serializers import ScheduleSerializers, ServiceSerializers
 from django.db.models import F
 from drf_spectacular.utils import extend_schema, OpenApiTypes
 class OpticalControllerCreate(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
     
     def get_queryset(self):
         return Optical.objects.all()
 
-    def get_serializer_class(self):
+    def get_permissions(self):
         if self.request.method == 'POST':
-            return OpticalCreateSerializers
-        return OpticalListSerializers
+            permission_classes = [IsAdminUser | IsOwnerUser]
+        elif self.request.method == 'GET':
+            permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def __init__(self, **kwargs):
         self.service = OpticalService()
         super().__init__(**kwargs)
 
-    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     def get(self, request, *args, **kwargs):
         optics = self.service.repository.list()
         serializer = self.get_serializer_class()(optics, many=True)
@@ -34,7 +36,6 @@ class OpticalControllerCreate(generics.GenericAPIView):
 
 
     parser_classes = (MultiPartParser, FormParser, JSONParser)
-    permission_classes = [IsOwnerUser|IsAdminUser]
     @extend_schema(
         # Sobrescribe el esquema para la carga de archivos
         request={
@@ -82,8 +83,18 @@ class OpticalControllerList(generics.GenericAPIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = OpticalService()
+    
+    def get_permissions(self):
+        if self.request.method == 'PATCH':
+            permission_classes = [IsAdminUser | IsOwnerUser]
+        elif self.request.method == 'DELETE':
+            permission_classes = [IsAdminUser | IsOwnerUser]
+        elif self.request.method == 'GET':
+            permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
-    permission_classes = [IsRegularUser| IsOwnerUser| IsAdminUser]
     # GET → listar una por id
     def get(self, request, *args, **kwargs):
         id_optical = kwargs.get('pk', None)
@@ -97,7 +108,6 @@ class OpticalControllerList(generics.GenericAPIView):
             serializer = self.serializer_class(optical)
             return Response(serializer.data)
 
-    permission_classes = [IsOwnerUser| IsAdminUser]
     @extend_schema(
         # Sobrescribe el esquema para la carga de archivos
         request={
@@ -143,7 +153,6 @@ class OpticalControllerList(generics.GenericAPIView):
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    permission_classes = [IsOwnerUser| IsAdminUser]
     # DELETE → eliminar óptica
     def delete(self, request, pk, *args, **kwargs):
 
@@ -191,7 +200,6 @@ class CityController(generics.GenericAPIView):
         return Response(serializer.data)
 
 class DayController(generics.GenericAPIView):
-    permission_classes = [permissions.AllowAny]
     serializer_class = DaySerializers
     queryset = Day.objects.all()
 
