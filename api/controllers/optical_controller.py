@@ -13,8 +13,11 @@ from django.db.models import F
 from drf_spectacular.utils import extend_schema, OpenApiTypes
 class OpticalControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = OpticalCreateSerializers
-    list_serializer_class= OpticalListSerializers
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return OpticalCreateSerializers
+        return OpticalListSerializers
     
     def get_queryset(self):
         return Optical.objects.all()
@@ -35,11 +38,10 @@ class OpticalControllerCreate(generics.GenericAPIView):
     permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
     def get(self, request, *args, **kwargs):
         optics = self.service.list_optical()
-        serializer = self.list_serializer_class(optics, many=True)
+        serializer = self.get_serializer_class()(optics, many=True)
         return Response(serializer.data)
 
 
-    parser_classes = (MultiPartParser, FormParser, JSONParser)
     @extend_schema(
         # Sobrescribe el esquema para la carga de archivos
         request={
