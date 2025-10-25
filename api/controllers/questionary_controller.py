@@ -8,7 +8,7 @@ from permissions import IsOwnerUser, IsAdminUser, IsRegularUser
 from api.serializers import QuestionaryCreateSerializers, QuestionaryListSerializers, QuestionCreateSerializers, QuestionListSerializers, OptionCreateSerializers, OptionListSerializers
 class QuestionaryControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-    create_serializer_class = QuestionaryCreateSerializers
+    serializer_class = QuestionaryCreateSerializers
     list_serializer_class = QuestionaryListSerializers
     queryset = Questionary.objects.all()
 
@@ -33,20 +33,19 @@ class QuestionaryControllerCreate(generics.GenericAPIView):
 
     # POST → crear nuevo cuestionario
     def post(self, request, *args, **kwargs):
-        serializer = self.create_serializer_class(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
             validated_data = serializer.validated_data
-            # validated_data['Author'] = request.user
             try:
                 questionary = self.service.create_questionary(validated_data)
-                return Response(self.create_serializer_class(questionary).data, status=status.HTTP_201_CREATED)
+                return Response(self.serializer_class(questionary).data, status=status.HTTP_201_CREATED)
             except ValueError as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class QuestionaryControllerList(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
-   
+    serializer_class=  QuestionaryListSerializers
    
     queryset = Questionary.objects.all()
 
@@ -82,7 +81,7 @@ class QuestionaryControllerList(generics.GenericAPIView):
         questionary_instance = self.service.list_questionary(pk)
         if not questionary_instance:
             return Response({"error": "Cuestionario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
-        serializer = self.create_serializer_class(
+        serializer = self.serializer_class(
             questionary_instance, data=request.data, partial=True
         )
         if serializer.is_valid():
@@ -130,9 +129,12 @@ class QuestionControllerCreate(generics.GenericAPIView):
     @extend_schema(
         request={
             'multipart/form-data': {
-                'question': {'type': 'string'},
-                'image_question': {'type': 'string', 'format': 'binary'},
-                'questionary': {'type': 'integer'},
+                'type': 'object',
+                'properties':{
+                    'question': {'type': 'string'},
+                    'image_question': {'type': 'string', 'format': 'binary'},
+                    'questionary_id': {'type': 'integer'},
+                }
             }
         },
         responses={200: QuestionListSerializers}
@@ -141,7 +143,6 @@ class QuestionControllerCreate(generics.GenericAPIView):
         serializer = self.create_serializer_class(data=request.data)
         if serializer.is_valid(raise_exception=True):
             validated_data = serializer.validated_data
-            
             try:
                 question = self.service.create_question(validated_data)
                 return Response(self.create_serializer_class(question).data, status=status.HTTP_201_CREATED)
@@ -184,9 +185,13 @@ class QuestionControllerList(generics.GenericAPIView):
     @extend_schema(
         request={
             'multipart/form-data': {
+                'type': 'object',
+                'properties':{
                 'question': {'type': 'string'},
                 'image_question': {'type': 'string', 'format': 'binary'},
                 'questionary': {'type': 'integer'},
+                }
+   
             }
         },
         responses={200: QuestionListSerializers}

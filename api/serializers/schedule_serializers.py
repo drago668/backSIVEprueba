@@ -24,7 +24,7 @@ class ScheduleSerializers(serializers.ModelSerializer):
     optical_id = serializers.PrimaryKeyRelatedField(queryset=Optical.objects.all(), source='optical', write_only=True)
     class Meta: 
         model = Schedule
-        fields = ['id_schedule','day','hour_aper','hour_close', 'day_id','hour_aper_id','hour_close_id', 'optical_id', 'optical']
-        read_only_fields = ['optical']
+        fields = ['id_schedule','day','hour_aper','hour_close', 'day_id','hour_aper_id','hour_close_id', 'optical_id']
+        read_only_fields = ['optical', 'day', 'hour_aper', 'hour_close']
         
     
