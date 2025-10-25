@@ -14,6 +14,7 @@ from drf_spectacular.utils import extend_schema, OpenApiTypes
 class OpticalControllerCreate(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = OpticalCreateSerializers
+    list_serializer_class= OpticalListSerializers
     
     def get_queryset(self):
         return Optical.objects.all()
@@ -21,8 +22,8 @@ class OpticalControllerCreate(generics.GenericAPIView):
     def get_permissions(self):
         if self.request.method == 'POST':
             permission_classes = [IsAdminUser | IsOwnerUser]
-        #elif self.request.method == 'GET':
-           # permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
+        elif self.request.method == 'GET':
+            permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
@@ -33,8 +34,8 @@ class OpticalControllerCreate(generics.GenericAPIView):
 
     permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
     def get(self, request, *args, **kwargs):
-        optics = self.service.repository.list()
-        serializer = self.get_serializer_class()(optics, many=True)
+        optics = self.service.list_optical()
+        serializer = self.list_serializer_class(optics, many=True)
         return Response(serializer.data)
 
 
