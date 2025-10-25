@@ -75,6 +75,11 @@ class OpticalControllerCreate(generics.GenericAPIView):
       if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['user'] = request.user
+        user = request.user
+        print(user.role_id)
+        if user.role_id == 3:
+          user.role_id = 2
+          user.save(update_fields=['role_id'])
         try:
           optical = self.service.create_optical(validated_data)
           return Response(self.get_serializer_class()(optical).data, status=status.HTTP_201_CREATED)
