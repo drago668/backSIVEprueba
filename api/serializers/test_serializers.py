@@ -1,4 +1,4 @@
-from api.models import Test, Questionary, User
+from api.models import Test, Questionary, User,Option
 from rest_framework import serializers
 
 class TestSerializers(serializers.ModelSerializer):
@@ -12,10 +12,10 @@ class TestCreateSerializers(serializers.ModelSerializer):
     questionary_id = serializers.IntegerField()
     user_id = serializers.IntegerField()
     question_id= serializers.IntegerField()
-   # answer_id= serializers.IntegerField()
+    answer_id= serializers.IntegerField()#descomentado por Esteban
     class Meta: 
         model = Test
-        fields = ['id_test', 'questionary_id', 'question_id', 'user_id', 'date_test']
+        fields = ['id_test', 'questionary_id', 'question_id', 'user_id', 'date_test','answer_id']
         read_only_fields = ['id_test']
         
 class TestDeleteSerializers(serializers.ModelSerializer):
