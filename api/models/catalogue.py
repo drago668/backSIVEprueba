@@ -8,7 +8,7 @@ class Catalogue(models.Model):
     description = models.CharField(max_length=500 , default='Sin descripción')
     image = models.ImageField(upload_to='catalogue/image/', null=True, blank=True)
     price = models.IntegerField( default=0)
-    optical = models.ForeignKey(Optical, models.DO_NOTHING, db_column = 'id_optical')
+    optical = models.ForeignKey(Optical, models.CASCADE, db_column = 'id_optical')
     
     class Meta: 
         managed = True
