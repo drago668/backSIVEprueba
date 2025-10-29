@@ -173,8 +173,8 @@ class OpticalControllerList(generics.GenericAPIView):
             if deleted:
               user = request.user
               print(user.role_id)
-              if user.role_id == 3:
-                user.role_id = 2
+              if user.role_id == 2:
+                user.role_id = 3
                 user.save(update_fields=['role_id'])
               return Response(status=status.HTTP_200_OK)
             return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
