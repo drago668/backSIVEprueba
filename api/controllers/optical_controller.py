@@ -171,7 +171,12 @@ class OpticalControllerList(generics.GenericAPIView):
         try:
             deleted = self.service.delete_optical(pk)
             if deleted:
-                return Response(status=status.HTTP_200_OK)
+              user = request.user
+              print(user.role_id)
+              if user.role_id == 2:
+                user.role_id = 3
+                user.save(update_fields=['role_id'])
+              return Response(status=status.HTTP_200_OK)
             return Response({"error": "Óptica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
