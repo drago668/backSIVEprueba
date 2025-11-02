@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "api",
+   # "api", comentado por Esteban
     "knox",
+    "api.apps.ApiConfig",
     'django_rest_passwordreset',
     "corsheaders",
     "drf_spectacular",
@@ -65,7 +66,10 @@ ROOT_URLCONF = "SIVEBACK.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS":[
+            BASE_DIR / "templates",
+            BASE_DIR / "api" / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -147,6 +151,9 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+# URL del frontend (tu app React)   
+FRONTEND_BASE_URL = "http://localhost:5173"
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -154,7 +161,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-DEFAULT_FROM_EMAIL = 'CBI ANALYTICS'
+DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
+#DEFAULT_FROM_EMAIL = 'CBI ANALYTICS'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -192,3 +200,7 @@ SPECTACULAR_SETTINGS = {
     }
   ],
 }
+DJANGO_REST_PASSWORDRESET = {
+    'RESET_PASSWORD_URL': 'password_reset?token={token}',
+}
+
