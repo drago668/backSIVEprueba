@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +29,7 @@ SECRET_KEY = "django-insecure-axlo*3hmaom_^%g#lcy#zg41w75ut)4e9i*#%_ql&-is-8lft5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['Localhost','127.0.0.1','backsivedeploy-production-4511.up.railway.app']
 
 
 # Application definition
@@ -40,6 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'cloudinary',
+    'cloudinary_storage',
+    "whitenoise.runserver_nostatic",
     "rest_framework",
    # "api", comentado por Esteban
     "knox",
@@ -102,20 +106,12 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv('DB_NAME'),
-        "USER": os.getenv('DB_USER'),
-        "PASSWORD": os.getenv('DB_PASSWORD'),
-        "HOST": "localhost",
-        "PORT": os.getenv('DB_PORT'),
-    }
+    "default": dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 MEDIA_URL = '/media/'
-
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTH_USER_MODEL = 'api.user'
@@ -167,8 +163,9 @@ DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR / "staticfiles") 
 STATIC_URL = "static/"
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -176,7 +173,9 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:5173"
+   "http://localhost:5173",
+   "https://sivedeploy-1.onrender.com",
+   "https://sive-00qf.onrender.com"
    ]
 
 SPECTACULAR_SETTINGS = {
