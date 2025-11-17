@@ -113,14 +113,7 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    }
-}
+
 
 
 # Password validation
@@ -169,7 +162,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
-#DEFAULT_FROM_EMAIL = 'CBI ANALYTICS'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -185,8 +177,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS = [
    "http://localhost:5173",
    "https://sivedeploy-1.onrender.com",
-   "https://sive-00qf.onrender.com",
-
+   "https://sive-00qf.onrender.com"
    ]
 
 SPECTACULAR_SETTINGS = {
