@@ -109,6 +109,8 @@ REST_FRAMEWORK = {
 DATABASES = {
     "default": dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
+# temporal mientras debuggeas
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
