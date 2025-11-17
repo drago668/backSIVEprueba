@@ -28,8 +28,7 @@ SECRET_KEY = "django-insecure-axlo*3hmaom_^%g#lcy#zg41w75ut)4e9i*#%_ql&-is-8lft5
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ['*']
-#ALLOWED_HOSTS = ['Localhost','127.0.0.1','backsivedeploy-production-4511.up.railway.app','backsive-production.up.railway.app']
+ALLOWED_HOSTS = ['Localhost','127.0.0.1','backsivedeploy-production-4511.up.railway.app','backsive-production.up.railway.app']
 
 
 # Application definition
@@ -109,12 +108,21 @@ REST_FRAMEWORK = {
 DATABASES = {
     "default": dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-# temporal mientras debuggeas
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    }
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTH_USER_MODEL = 'api.user'
@@ -168,7 +176,6 @@ DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") 
 STATIC_URL = "/static/"
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
