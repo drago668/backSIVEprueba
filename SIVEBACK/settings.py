@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-axlo*3hmaom_^%g#lcy#zg41w75ut)4e9i*#%_ql&-is-8lft5
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ['Localhost','127.0.0.1','backsivedeploy-production-4511.up.railway.app','backsive-production.up.railway.app','backsive.onrender.com'']
+ALLOWED_HOSTS = ['Localhost','127.0.0.1','backsivedeploy-production-4511.up.railway.app','backsive-production.up.railway.app','backsive.onrender.com']
 
 
 # Application definition
