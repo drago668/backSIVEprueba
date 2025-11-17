@@ -18,7 +18,7 @@ class Optical(models.Model):
     longitud = models.FloatField(default=0.0)
     view = models.PositiveIntegerField(default=0)
 
-
+    is_verified = models.BooleanField(default=False)
     class Meta:
         managed = True
         db_table = 'optical'

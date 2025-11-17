@@ -40,3 +40,17 @@ class IsActiveUser(BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
         return request.user.state.name == 'Activo'
+    
+
+class IsVerifiedOwner(BasePermission):
+    """
+    Allows access only to verified optical owners.
+    """
+    message = 'El dueño de la óptica no está verificado.'
+
+    def has_permission(self, request, view):
+        return (
+            request.user.is_authenticated and
+            request.user.role_id == 2 and
+            request.user.is_verified_owner == True
+        )

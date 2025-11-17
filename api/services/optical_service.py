@@ -22,6 +22,9 @@ class OpticalService:
     def create_optical(self, data):
       if "nameOp" not in data or "email" not in data or "address" not in data:
         raise ValueError("El nombre, el correo electrónico y dirección son obligatorios.")
+      def create(self , validated_data):
+        validated_data['is_verified'] = False
+        return super().create(validated_data)
       return self.repository.create_optical(**data)
 
 

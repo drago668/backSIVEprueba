@@ -7,3 +7,4 @@ from .state_controller import *
 from .comment_controller import * 
 from .report_controller import *
 from .users_controller import *
+from .admin_controller import *

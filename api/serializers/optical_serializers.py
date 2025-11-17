@@ -4,7 +4,8 @@ from rest_framework import serializers
 class OpticalCreateSerializers(serializers.ModelSerializer):
   class Meta:
     model = Optical
-    fields = ['id_optical', 'descriptionOp','nameOp', 'address', 'tel', 'city', 'email', 'logo', 'certCadecuacion', 'certDispensacion', 'latitud', 'longitud']
+    fields = ['id_optical', 'descriptionOp','nameOp', 'address', 'tel', 'city', 'email', 'logo', 'certCadecuacion', 'certDispensacion', 'latitud', 'longitud', 'is_verified']
+    read_only_fields = ['id_optical', 'is_verified']
 
 class OpticalListSerializers(serializers.ModelSerializer):
   class Meta:

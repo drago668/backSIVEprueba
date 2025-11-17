@@ -33,6 +33,7 @@ class User(AbstractUser):
   role = models.ForeignKey(Role, on_delete=models.CASCADE, null=False, blank=False, default=3)
   state = models.ForeignKey(State,on_delete=models.CASCADE, null=True, blank=True, default=1)
   
+  is_verified_owner = models.BooleanField(default=False)
   objects = UserManager()
   
   USERNAME_FIELD = 'email'

@@ -25,7 +25,7 @@ class OpticalControllerCreate(generics.GenericAPIView):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            permission_classes = [IsAdminUser | IsOwnerUser]
+            permission_classes = [IsRegularUser|IsAdminUser | IsOwnerUser]
         elif self.request.method == 'GET':
             permission_classes = [IsRegularUser | IsOwnerUser | IsAdminUser]
         else:
@@ -75,16 +75,10 @@ class OpticalControllerCreate(generics.GenericAPIView):
       if serializer.is_valid():
         validated_data = serializer.validated_data
         validated_data['user'] = request.user
-        user = request.user
-        print(user.role_id)
-        if user.role_id == 3:
-          user.role_id = 2
-          user.save(update_fields=['role_id'])
-        try:
-          optical = self.service.create_optical(validated_data)
-          return Response(self.get_serializer_class()(optical).data, status=status.HTTP_201_CREATED)
-        except ValueError as e:
-          return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        validated_data['is_verified'] = False
+        
+        optical = self.service.create_optical(validated_data)
+        return Response(self.get_serializer_class()(optical).data, status=status.HTTP_201_CREATED)
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OpticalControllerList(generics.GenericAPIView):
