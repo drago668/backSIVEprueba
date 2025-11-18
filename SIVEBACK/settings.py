@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from environ import Env
+env = Env()
+Env.read_env()
 import dj_database_url
 
 
@@ -155,7 +158,7 @@ USE_I18N = True
 USE_TZ = True
 # URL del frontend (tu app React)   
 FRONTEND_BASE_URL = "http://localhost:5173"
-ENVIRONMENT=os.getenv("ENVIRONMENT", "development")
+ENVIRONMENT = env('ENVIRONMENT', default='production')
 
 if ENVIRONMENT == 'production':
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -167,6 +170,9 @@ if ENVIRONMENT == 'production':
     DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
 else: 
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -199,19 +205,19 @@ SPECTACULAR_SETTINGS = {
 }
 
 SPECTACULAR_SETTINGS = {
-  'TITLE': 'API SIVEBACK',
-  'DESCRIPTION': 'Documentación de la API',
-  'VERSION': '1.0.0',
-  # Registra la extensión que acabas de crear
-  'AUTHENTICATION_EXTENSIONS': {
-    'knox.auth.TokenAuthentication': 'api.auth.KnoxTokenScheme',
-  },
-  'SECURITY': [
-    {
-      'tokenAuth': []
+    'TITLE': 'API SIVEBACK',
+    'DESCRIPTION': 'Documentación de la API',
+    'VERSION': '1.0.0',
+    # Registra la extensión que acabas de crear
+    'AUTHENTICATION_EXTENSIONS': {
+        'knox.auth.TokenAuthentication': 'api.auth.KnoxTokenScheme',
+    },
+    'SECURITY': [
+        {
+            'tokenAuth': []
+        }
+    ],
     }
-  ],
-}
 DJANGO_REST_PASSWORDRESET = {
     'RESET_PASSWORD_URL': 'password_reset?token={token}',
 }
