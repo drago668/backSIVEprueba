@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
     "rest_framework",
-   # "api", comentado por Esteban
+    # "api", comentado por Esteban
     "knox",
     "api.apps.ApiConfig",
     'django_rest_passwordreset',
@@ -54,9 +54,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -181,10 +181,15 @@ STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:5173",
-   "https://sivedeploy-1.onrender.com",
-   "https://sive-00qf.onrender.com"
-   ]
+    "http://localhost:5173",
+    "https://sivedeploy-1.onrender.com",
+    "https://sive-00qf.onrender.com"
+    ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",
+    "https://sive-00qf.onrender.com",
+]
+
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'SIVEBACK API',

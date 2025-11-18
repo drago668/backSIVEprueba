@@ -2,6 +2,9 @@ from api.models import Optical, City
 from rest_framework import serializers
 
 class OpticalCreateSerializers(serializers.ModelSerializer):
+  def validate(self, data):
+        print("LOGO =>", data.get("logo"))
+        return data
   class Meta:
     model = Optical
     fields = ['id_optical', 'descriptionOp','nameOp', 'address', 'tel', 'city', 'email', 'logo', 'certCadecuacion', 'certDispensacion', 'latitud', 'longitud', 'is_verified']
