@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
-    'cloudinary',
-    'cloudinary_storage',
+    #'cloudinary',
+    #'cloudinary_storage',
     "rest_framework",
     # "api", comentado por Esteban
     "knox",
@@ -155,15 +155,15 @@ USE_I18N = True
 USE_TZ = True
 # URL del frontend (tu app React)   
 FRONTEND_BASE_URL = "http://localhost:5173"
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
+os.getenv("ENVIRONMENT", "development")
+if ENVIRONMENT == 'production':
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+    DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
 
 
 # Static files (CSS, JavaScript, Images)
