@@ -155,7 +155,8 @@ USE_I18N = True
 USE_TZ = True
 # URL del frontend (tu app React)   
 FRONTEND_BASE_URL = "http://localhost:5173"
-os.getenv("ENVIRONMENT", "development")
+ENVIRONMENT=os.getenv("ENVIRONMENT", "development")
+
 if ENVIRONMENT == 'production':
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'smtp.gmail.com'
@@ -164,6 +165,8 @@ if ENVIRONMENT == 'production':
     EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
     DEFAULT_FROM_EMAIL = "sivebot.2025@gmail.com"
+else: 
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Static files (CSS, JavaScript, Images)
