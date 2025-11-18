@@ -186,7 +186,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://sive-00qf.onrender.com"
     ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com",
+    "https://sivedeploy-1.onrender.com",
     "https://sive-00qf.onrender.com",
 ]
 
