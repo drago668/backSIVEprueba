@@ -1,6 +1,6 @@
 services:
 - type: web
-  name: backSIVE
+  name: backSIVEprueba
   env: python
   buildCommand: "./build.sh" # Usaremos un script de build para mayor claridad
   startCommand: "gunicorn SIVEBACK.wsgi:application --bind 0.0.0.0:$PORT" # Reemplaza 'mi_proyecto' con el nombre de tu proyecto
